@@ -1,0 +1,50 @@
+body {
+    background-color: #FDF5E6; /* Light cream background */
+    margin: 0px;
+    padding: 80px;
+    font-family: ui-monospace, monospace; /* Monospace font */
+    font-size: 18px; /* Set the font size for the body */
+    word-spacing: 0.2em;
+}
+.container {
+    max-width: 800px;
+    margin: 20px auto; /* Added margin for better spacing */
+    padding: 20px;
+    overflow: hidden; /* Clear floats */
+}
+.header {
+    overflow: hidden; /* Clear floats */
+    display: flex;
+    justify-content: space-between; /* Spacing between elements */
+    align-items: center; /* Align items vertically */
+}
+.header a {
+    text-decoration: none;
+    color: black;
+    font-size: 19px;
+}
+.header a.title-link {
+    font-size: 30px; /* Bigger font size for lucio.dev.br */
+    color: rgb(19, 19, 194)
+}
+.header a:hover {
+    color: #332;
+}
+.title {
+    margin-right: 100px; /* Increased space between title and links */
+    font-size: 20px
+}
+.content {
+    margin-top:40px;
+    font-size: 18px;
+}
+.contact-info {
+    font-size: 16px;
+    margin-top: 20px;
+}
+hr {
+    border: 0;
+    height: 1px;
+    background-color: black;
+    margin: 60px 0 10px 0; /* Added more space before and after the horizontal line */
+}
