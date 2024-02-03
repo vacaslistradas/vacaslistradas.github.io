@@ -46,5 +46,15 @@ hr {
     border: 0;
     height: 1px;
     background-color: black;
-    margin: 60px 0 10px 0; /* Added more space before and after the horizontal line */
+    margin: 20px 0 20px 0; /* Added more space before and after the horizontal line */
+}
+.hidden {
+    display: none;
+}
+
+/* Style for the toggle button */
+.toggle-details {
+    cursor: pointer;
+    color: blue;
+    margin-left: 5px;
 }
