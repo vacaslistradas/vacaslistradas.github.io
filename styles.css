@@ -58,3 +58,26 @@ hr {
     color: blue;
     margin-left: 5px;
 }
+@media only screen and (max-width: 600px) {
+    /* Adjustments for smaller screens */
+    body {
+        padding: 0px; /* Adjust padding for better spacing on smaller screens */
+        font-size: 16px;
+    }
+
+    .container {
+        padding: 20px; /* Adjust container padding for smaller screens */
+        max-width: 100%; /* Ensure container fills the screen width */
+    }
+
+    .header a.title-link {
+        font-size: 20px; /* Bigger font size for lucio.dev.br */
+        color: rgb(19, 19, 194)
+    }
+    .title {
+        margin-right: 10px; /* Increased space between title and links */
+        font-size: 14px
+    }
+
+    /* Adjust other styles as needed for mobile layout */
+}
