@@ -95,5 +95,9 @@ hr {
         margin: 10px; /* Adjust the right margin between the links */
     }
 
+    .contact-info{
+        text-align: left; /* Adjust the right margin between the links */
+    }
+
     /* Adjust other styles as needed for mobile layout */
 }
