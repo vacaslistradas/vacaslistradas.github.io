@@ -61,22 +61,38 @@ hr {
 @media only screen and (max-width: 600px) {
     /* Adjustments for smaller screens */
     body {
-        padding: 0px; /* Adjust padding for better spacing on smaller screens */
+        padding: 10px; /* Adjust padding for better spacing on smaller screens */
         font-size: 16px;
+        
+        
     }
 
     .container {
         padding: 20px; /* Adjust container padding for smaller screens */
         max-width: 100%; /* Ensure container fills the screen width */
+        text-align: justify;
+        
+    }
+
+    .header {
+        display: block; /* Set header to block display */
+        text-align: center;
+
     }
 
     .header a.title-link {
         font-size: 20px; /* Bigger font size for lucio.dev.br */
-        color: rgb(19, 19, 194)
+        color: rgb(19, 19, 194);
+        text-align: center;
     }
     .title {
         margin-right: 10px; /* Increased space between title and links */
-        font-size: 14px
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .header a.navigation-link{
+        margin: 10px; /* Adjust the right margin between the links */
     }
 
     /* Adjust other styles as needed for mobile layout */
