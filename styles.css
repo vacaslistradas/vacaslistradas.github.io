@@ -17,6 +17,7 @@ body {
     display: flex;
     justify-content: space-between; /* Spacing between elements */
     align-items: center; /* Align items vertically */
+    padding-bottom: 40px;
 }
 .header a {
     text-decoration: none;
@@ -83,6 +84,7 @@ hr {
     .header {
         display: block; 
         text-align: center;
+        padding-bottom: 10px;
 
     }
 
