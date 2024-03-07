@@ -23,6 +23,7 @@ body {
     color: black;
     font-size: 19px;
 }
+
 .header a.title-link {
     font-size: 30px; /* Bigger font size for lucio.dev.br */
     color: rgb(19, 19, 194)
@@ -52,13 +53,17 @@ hr {
     display: none;
 }
 
+
+
+
+
 /* Style for the toggle button */
 .toggle-details {
     cursor: pointer;
     color: blue;
     margin-left: 5px;
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 700px) {
     /* Adjustments for smaller screens */
     body {
         padding: 10px; /* Adjust padding for better spacing on smaller screens */
@@ -70,12 +75,13 @@ hr {
     .container {
         padding: 20px; /* Adjust container padding for smaller screens */
         max-width: 100%; /* Ensure container fills the screen width */
-        text-align: justify;
+        /*text-align: justify;*/
+    
         
     }
 
     .header {
-        display: block; /* Set header to block display */
+        display: block; 
         text-align: center;
 
     }
@@ -92,12 +98,20 @@ hr {
     }
 
     .header a.navigation-link{
-        margin: 10px; /* Adjust the right margin between the links */
+        margin: 10px; 
+        display:inline-block;
+        
     }
 
     .contact-info{
-        text-align: left; /* Adjust the right margin between the links */
+        text-align: left; 
     }
 
-    /* Adjust other styles as needed for mobile layout */
+    .content-index {
+        font-size: 16.3px;
+        text-align: justify;
+
+    }
+
+    
 }
