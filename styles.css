@@ -4,7 +4,7 @@ body {
     padding: 80px;
     font-family: ui-monospace, monospace; /* Monospace font */
     font-size: 18px; /* Set the font size for the body */
-    word-spacing: 0.2em;
+    word-spacing: 0.1em;
 }
 .container {
     max-width: 800px;
@@ -38,7 +38,6 @@ body {
 }
 .content {
     margin-top:40px;
-    font-size: 18px;
 }
 .contact-info {
     font-size: 16px;
@@ -69,8 +68,7 @@ hr {
     body {
         padding: 10px; /* Adjust padding for better spacing on smaller screens */
         font-size: 16px;
-        
-        
+            
     }
 
     .container {
@@ -110,7 +108,6 @@ hr {
     }
 
     .content-index {
-        font-size: 16.3px;
         text-align: justify;
 
     }
