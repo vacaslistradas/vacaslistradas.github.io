@@ -1,0 +1,31 @@
+Teams,Lat,Long,Venue,Tstring
+Blue Jays,43.64138889,-79.38916667,Rogers Centre,America/Toronto
+Red Sox,42.34638889,-71.0975,Fenway Park,America/New_York
+Yankees,40.82916667,-73.92638889,Yankee Stadium,America/New_York
+Mets,40.75694444,-73.84583333,Citi Field,America/New_York
+Pirates,40.44694444,-80.00583333,PNC Park,America/New_York
+Phillies,39.90583333,-75.16638889,Citizens Bank Park,America/New_York
+Nationals,38.87277778,-77.0075,Nationals Park,America/New_York
+Orioles,39.28388889,-76.62166667,Oriole Park at Camden Yards,America/New_York
+Braves,33.73527778,-84.38944444,Turner Field,America/New_York
+Marlins,25.77805556,-80.21972222,Marlins Park,America/New_York
+Rays,27.76833333,-82.65333333,Tropicana Field,America/New_York
+Indians,41.49583333,-81.68527778,Progressive Field,America/New_York
+Reds,39.0975,-84.50666667,Great American Ball Park,America/New_York
+Tigers,42.33916667,-83.04861111,Comerica Park,America/Detroit
+Brewers,43.02833333,-87.97111111,Miller Park,America/Chicago
+Twins,44.98166667,-93.27833333,Target Field,America/Chicago
+Cubs,41.94833333,-87.65555556,Wrigley Field,America/Chicago
+White Sox,41.83,-87.63388889,U.S. Cellular Field,America/Chicago
+Cardinals,38.6225,-90.19305556,Busch Stadium,America/Chicago
+Royals,39.05138889,-94.48055556,Kauffman Stadium,America/Chicago
+Rangers,32.75138889,-97.08277778,Globe Life Park in Arlington,America/Chicago
+Astros,29.75694444,-95.35555556,Minute Maid Park,America/Chicago
+Rockies,39.75611111,-104.9941667,Coors Field,America/Denver
+Diamondbacks,33.44527778,-112.0669444,Chase Field,America/Phoenix
+Dodgers,34.07361111,-118.24,Dodger Stadium,America/Los_Angeles
+Padres,32.70729983,-117.1565998,PETCO Park,America/Los_Angeles
+Angels,33.80027778,-117.8827778,Angel Stadium of Anaheim,America/Los_Angeles
+Giants,37.77833333,-122.3894444,AT&T Park,America/Los_Angeles
+Athletics,37.75166667,-122.2005556,Oakland Coliseum,America/Los_Angeles
+Mariners,47.59138889,-122.3325,Safeco Field,America/Los_Angeles
