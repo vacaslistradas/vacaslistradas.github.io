@@ -617,12 +617,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         player1Info.append("span")
             .style("font-weight", "bold")
-            .style("font-size", "16px")
+            .style("font-size", "15px")
             .text(player1.name);
 
         player1Info.append("span")
             .style("color", "#64748b")
             .style("margin-left", "8px")
+            .style("font-size", "14px")
             .text(`${player1.count} HRs • ${player1.team} • Bats: ${player1.batHand}`);
 
         infoSection.append("span")
@@ -638,12 +639,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         player2Info.append("span")
             .style("font-weight", "bold")
-            .style("font-size", "16px")
+            .style("font-size", "15px")
             .text(player2.name);
 
         player2Info.append("span")
             .style("color", "#64748b")
             .style("margin-left", "8px")
+            .style("font-size", "14px")
             .text(`${player2.count} HRs • ${player2.team} • Bats: ${player2.batHand}`);
 
         const histogramContainer = modalContent.append("div")
