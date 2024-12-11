@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Anatomy of a Home Run - MLB Analysis</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://d3js.org/topojson.v3.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #1a365d;
+            --secondary-color: #2c5282;
+            --accent-color: #ed1e24;
+            --text-color: #2d3748;
+            --background-color: #f7fafc;
+            --section-background: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.8;
+            color: var(--text-color);
+            background-color: var(--background-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.3;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            margin: 2rem 0 1.5rem;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .intro {
+            font-size: 1.2rem;
+            color: #e2e8f0;
+            max-width: 800px;
+            margin: 2rem auto;
+            text-align: center;
+        }
+
+        .section {
+            background: var(--section-background);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .viz-container {
+            width: 100%;
+            height: 600px;
+            margin: 2rem 0;
+            position: relative;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        #viz2-container {
+            height: 700px;  
+            margin: 3rem 0;  
+        }
+
+        #viz3-container {
+            min-height: 600px;  
+            margin: 3rem 0;  
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .graph-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow: auto;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .definition-box {
+            background-color: #edf2f7;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .viz-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <style>
+        /* Previous styles remain the same */
+        .authors {
+            font-size: 1.2rem;
+            color: #e2e8f0;
+            max-width: 800px;
+            margin: 1.5rem auto 0;
+            text-align: center;
+        }
+
+        .authors span {
+            margin: 0 0.5rem;
+        }
+
+        /* All previous styles remain exactly the same */
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>The Anatomy of a Home Run</h1>
+            <div class="authors">
+                By <span>Lúcio Moreira</span> and <span>Braedan Shigley</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="section">
+            <p>Every sport has that one magical moment that everyone, even those who aren't fans, can marvel at in highlight reels. For soccer it would be an unlikely goal from their best striker, and for American football it would be the touchdown – for baseball, it's unquestionably the home run.</p>
+            
+            <p>While we dare not diminish the aura of a goal or a touchdown, we would argue that there's something a bit special about home runs, owing mostly to the nature of hitting a ball that is going very fast: it's hard. Hitting successfully in just 25% of your chances makes you a pretty decent player. Hitting in 30% of your chances makes you one of the best players in any given season. Hitting in 40% of your chances makes you one of the best players in all of baseball history, which began in the 1800s. These percentages, by the way, correspond to any type of hit, not just a home run – the home run is a lot rarer and accounts for only around ~13% of all hits in the 2016 season (5626 home runs with 42478 total hits).</p>
+            
+            <p>So in a statistical sense at least, there is something interesting about home runs. We decided that we wanted to use a dataset that contains every single play of every single game in the 2016 MLB season to try and figure out what can lead to a home run.</p>
+        </section>
+
+        <section class="section">
+            <h2>Stadium Analysis</h2>
+            <p>And so began our journey into this mildly terrifying dataset. As you can imagine, it's sort of difficult to know where to start, especially when there are so many different data points for each play of every game. We figured that diving in headfirst would be the best approach, and the first thing we noticed is that there is a spike in home runs during night time. This turned out to not be especially surprising by itself, since most games for any given stadium are played at night. However, we noticed a spike around 8pm local time for quite a few of the stadiums.</p>
+            
+            <p>Below, you'll find a map of the continental United States and a part of Canada that has a dot for all 30 MLB stadiums. If you see that some dots are close to each other, hovering over them will cause them to drift far apart enough that you can more easily interact with them. Once you've selected a specific dot to investigate, hover over it to see some initial statistics about total home runs, and their split in night vs day games. If you want to see a more detailed breakdown of how the home runs breakdown by time of day for a particular stadium, click on the dot, and you'll see a line chart showing how many home runs occur by time of day.</p>
+            
+            <div id="viz2-container" class="viz-container"></div>
+
+            <p>Of particular note, we think you'll see, is the spike around 8pm local time where home runs are especially common for most of the MLB stadiums. Our initial thought was that this was correlated with something like air temperature or air pressure. However, since air pressure increases as it gets cooler in the night, and since it's harder to hit a ball further with higher air pressure, this theory seems unlikely at face value. Rather, we suspect that it has more to do with the lighting of the stadium than it does with any aspect of climate. Indeed, 8pm is around sunset time for these stadiums during the season, and so we started to look around for other evidence to see if we could find anything else interesting that might shed some light on this correlation with time (pun intended).</p>
+        </section>
+
+        <section class="section">
+            <h2>Game State Analysis</h2>
+            <p>We narrowed our ideas down to two general categories: the state of the game at the time the home run was hit, and the hitter's perception of the ball independent of the state of the game.</p>
+
+            <p>We immediately thought to look at the relative time of the game at which the home run was hit to see if that would be more highly correlated with home runs compared to the absolute local time of the venue. To do this, we found the top 20 home run hitters in 2016 and looked at the inning in which they hit their home runs. The inning is essentially a unit of "time" in a baseball game – a normal game has 9 innings, but a game will go past 9 if there is a tie and won't end until the tie is broken. Below, you'll see a visualization displaying the top 20 home run hitters. If you click on each hitter, a popup will display that will allow you to see how their home run hitting varies based on the inning.</p>
+
+            <div id="viz1-container" class="viz-container"></div>
+        </section>
+
+        <section class="section">
+            <h2>Ball-Strike Analysis</h2>
+            <p>The next bit of information that caught our eye was the ratio of balls to strikes. Before we get ahead of ourselves though, some context:</p>
+
+            <div class="definition-box">
+                <p><strong>Strike zone:</strong> the zone in 3D space where the pitcher has to throw the ball</p>
+                <p><strong>Ball:</strong> a pitch thrown outside the strike zone</p>
+                <p><strong>Strike:</strong> a pitch thrown inside the strike zone, or a pitch that a hitter swings at regardless of location</p>
+            </div>
+
+            <p>In any given at-bat the pitcher needs to throw 3 strikes to get the batter out. But if they throw 4 balls, the hitter gets to walk to base in what is called a base on balls.</p>
+
+            <p>It seems pretty intuitive that there would be some differences in how likely it is for a home run to be hit, since the ratio of balls to strikes would be a rough measure of who has the advantage. If there are more balls than strikes, that means the hitter has the advantage, because they have more opportunities to hit the ball. Conversely, if there are more strikes, the pitcher has the advantage, since the hitter has fewer opportunities to hit the ball before they are out.</p>
+
+            <div id="viz3-container" class="viz-container"></div>
+
+            <p>So, we wrangled the data and found some very interesting trends. Unsurprisingly, the ratio of balls to strikes (or "count") with the highest home run percentage is the one where there is the greatest difference between balls and strikes, which is 3 balls and 0 strikes. Equally unsurprisingly, the count that has the lowest home run percentage is the one with the greatest difference between strikes and balls, which is 0 balls and 2 strikes. The trends get more interesting in the less extreme cases, however.</p>
+
+            <p>Aside from the counts where the hitter or pitcher is favored, another thing to notice is that the home run percentage drops as you compare the 0-0, 1-1, and 2-2 counts. This trend also holds for any counts that have equivalent differences between balls and strikes, e.g. 1–0 vs 2-1 vs 3-2. But how can this be if all are equal differences in balls vs. strikes? We postulate that the hitter feels the pressure as the at-bat progresses and misses more often, leading to a lower home run percentage as a direct result.</p>
+
+            <p>We felt a bit unsatisfied by just the home run percentage by count, and so we did some more wrangling to figure out how often a player swings at a pitch for each ball and strike ratio. Interestingly, although home run percentage decreases as the overall number of pitches in the at-bat increases, hitters swing a lot more frequently as the number of pitches increases. This would seem to be confirmation of the idea that the "quality" of hitting decreases as the at-bat goes on – it isn't simply that the hitter isn't swinging.</p>
+        </section>
+
+        <section class="section">
+            <h2>Strike Zone Analysis</h2>
+            <p>We then thought that if the state of the game, i.e. balls and strikes, has an impact on the home runs, then the characteristics of the pitch itself would also be highly correlated with home run percentage in some way. Indeed, we found a field in the data that describes where in the strike zone a pitch is thrown. Again, before we get too far:</p>
+
+            <div class="definition-box">
+                <p>The strike zone is the region of 3D space in front of the batter that the pitcher needs to throw the ball into. It is subdivided into 9 zones consisting of a 3x3 grid of rectangles. There are also rectangles for regions of space that are outside the zone where the hitter does not have to swing at the ball.</p>
+            </div>
+
+            <p>We felt, as I'm sure you do too, that it would be quite a bit easier to hit a home run on a pitch that comes in at the dead center of the strike zone, and so we decided to investigate. Below, you'll see a visualization that first shows you a heat map of how often home runs are hit in each zone.</p>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Based on complete MLB game data from the 2016 season</p>
+        </div>
+    </footer>
+
+    <script src="viz2.js"></script>
+    <script src="viz3.js"></script>
+    <script src="viz1.js"></script>
+</body>
+</html>
