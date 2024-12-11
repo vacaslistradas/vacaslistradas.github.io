@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- Previous head section and styles remain unchanged -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -86,18 +87,18 @@
         }
 
         #viz2-container {
-            height: 700px;  
-            margin: 3rem 0;  
+            height: 700px;
+            margin: 3rem 0;
         }
 
         #viz3-container {
-            min-height: 600px;  
-            margin: 3rem 0;  
+            min-height: 600px;
+            margin: 3rem 0;
         }
 
         #viz1-container {
-            min-height: 500px;  
-            margin: 3rem 0;  
+            min-height: 500px;
+            margin: 3rem 0;
         }
 
         p {
@@ -156,29 +157,9 @@
     </style>
 </head>
 <body>
-
-    <style>
-        .authors {
-            font-size: 1.2rem;
-            color: #e2e8f0;
-            max-width: 800px;
-            margin: 1.5rem auto 0;
-            text-align: center;
-        }
-
-        .authors span {
-            margin: 0 0.5rem;
-        }
-
-    </style>
-</head>
-<body>
     <header>
         <div class="container">
             <h1>The Anatomy of a Home Run</h1>
-            <div class="authors">
-                By <span>Lúcio Moreira</span> and <span>Braedan Shigley</span>
-            </div>
         </div>
     </header>
 
@@ -192,29 +173,30 @@
         </section>
 
         <section class="section">
-            <h2>Stadium Analysis</h2>
+            <h2>Venue Analysis</h2>
             <p>And so began our journey into this mildly terrifying dataset. As you can imagine, it's sort of difficult to know where to start, especially when there are so many different data points for each play of every game. We figured that diving in headfirst would be the best approach, and the first thing we noticed is that there is a spike in home runs during night time. This turned out to not be especially surprising by itself, since most games for any given stadium are played at night. However, we noticed a spike around 8pm local time for quite a few of the stadiums.</p>
             
-            <p>Below, you'll find a map of the continental United States and a part of Canada that has a dot for all 30 MLB stadiums. If you see that some dots are close to each other, hovering over them will cause them to drift far apart enough that you can more easily interact with them. Once you've selected a specific dot to investigate, hover over it to see some initial statistics about total home runs, and their split in night vs day games. If you want to see a more detailed breakdown of how the home runs breakdown by time of day for a particular stadium, click on the dot, and you'll see a line chart showing how many home runs occur by time of day.</p>
-            
             <div id="viz2-container" class="viz-container"></div>
+            
+            <p>In our data wrangling, we initially noticed a spike around 8pm local time where home runs are especially common for most of the MLB stadiums. Our initial thought was that this was correlated with something like air temperature or air pressure. However, since air pressure increases as it gets cooler in the night, and since it's harder to hit a ball further with higher air pressure, this theory seems unlikely at face value. Rather, we suspect that it has more to do with the lighting of the stadium or something intrinsic to the game itself than it does with any aspect of climate. Indeed, 8pm is around sunset time for these stadiums during the season, and so we started to look around for other evidence to see if we could find anything else interesting that might shed some light on this correlation with time (pun intended).</p>
 
-            <p>Of particular note, we think you'll see, is the spike around 8pm local time where home runs are especially common for most of the MLB stadiums. Our initial thought was that this was correlated with something like air temperature or air pressure. However, since air pressure increases as it gets cooler in the night, and since it's harder to hit a ball further with higher air pressure, this theory seems unlikely at face value. Rather, we suspect that it has more to do with the lighting of the stadium than it does with any aspect of climate. Indeed, 8pm is around sunset time for these stadiums during the season, and so we started to look around for other evidence to see if we could find anything else interesting that might shed some light on this correlation with time (pun intended).</p>
+            <p>What we instead discovered, however, upon visualizing the data by home run rate, is that on a per stadium basis, there isn't much of a correlation with home run rate and time of day. And so while we've ended up in quite a different place than where we started, we narrowed our ideas down to a general bucket of causes: the state of the game at the time the home run was hit.</p>
         </section>
 
         <section class="section">
             <h2>Game State Analysis</h2>
-            <p>We narrowed our ideas down to two general categories: the state of the game at the time the home run was hit, and the hitter's perception of the ball independent of the state of the game.</p>
-
-            <p>We immediately thought to look at the relative time of the game at which the home run was hit to see if that would be more highly correlated with home runs compared to the absolute local time of the venue. To do this, we found the top 20 home run hitters in 2016 and looked at the inning in which they hit their home runs. The inning is essentially a unit of "time" in a baseball game – a normal game has 9 innings, but a game will go past 9 if there is a tie and won't end until the tie is broken. Below, you'll see a visualization displaying the top 20 home run hitters. If you click on each hitter, a popup will display that will allow you to see how their home run hitting varies based on the inning.</p>
-
+            <p>We immediately thought to look at the relative time of the game at which the home run was hit to see if that would be more highly correlated with home runs compared to the absolute local time of the venue. To do this, we found the top 14 home run hitters in 2016 and looked at the inning in which they hit their home runs. The inning is essentially a unit of "time" in a baseball game – a normal game has 9 innings, but a game will go past 9 if there is a tie and won't end until the tie is broken.</p>
+            
+            
             <div id="viz1-container" class="viz-container"></div>
+            
+            <p>When looking at the top 14 players, there isn't a huge correlation that is obvious based on the data alone, except for a peak in home runs (generally) around the middle of the game, especially the 4th inning. Indeed, looking at all home runs in 2016 confirmed that most home runs are hit in the middle of the game (innings 4-7), with fewer home runs hit in innings 2-3 and 8-9. The first inning, however, is an interesting outlier both in our dataset of 14 players as well as the raw total of home runs by inning. The only 2 innings with more home runs are the 4th and 6th innings.</p>
+            
+            <p>This is definitely an interesting find – we would have guessed for there to be a stronger positive correlation between inning number and home run count since we were seeing some correlation with time. We think that the best way to explain the anomaly of the first inning is that pitchers are very likely less dialed in when the game first begins, leading to a higher number of pitches that are easier to hit further. As for the peak around the middle of the game with a tapering off towards the end of the game, we figured that this trend was probably better explained by the state of the game rather than some extrinsic factor like time or weather.</p>
         </section>
 
         <section class="section">
-            <h2>Ball-Strike Analysis</h2>
-            <p>The next bit of information that caught our eye was the ratio of balls to strikes. Before we get ahead of ourselves though, some context:</p>
-
+            <h2>Ball-Strike Analysis (Game State Part 2)</h2>
             <div class="definition-box">
                 <p><strong>Strike zone:</strong> the zone in 3D space where the pitcher has to throw the ball</p>
                 <p><strong>Ball:</strong> a pitch thrown outside the strike zone</p>
@@ -235,14 +217,12 @@
         </section>
 
         <section class="section">
-            <h2>Strike Zone Analysis</h2>
-            <p>We then thought that if the state of the game, i.e. balls and strikes, has an impact on the home runs, then the characteristics of the pitch itself would also be highly correlated with home run percentage in some way. Indeed, we found a field in the data that describes where in the strike zone a pitch is thrown. Again, before we get too far:</p>
+            <h2>Conclusion</h2>
+            <p>Baseball is often romanticized as a game of raw power or athletic skill, but our exploration into the 2016 MLB season revealed a far more nuanced narrative. It's clear home runs are an interplay of game context and psychological dynamics.</p>
 
-            <div class="definition-box">
-                <p>The strike zone is the region of 3D space in front of the batter that the pitcher needs to throw the ball into. It is subdivided into 9 zones consisting of a 3x3 grid of rectangles. There are also rectangles for regions of space that are outside the zone where the hitter does not have to swing at the ball.</p>
-            </div>
+            <p>Our analysis uncovered layers of complexity behind what might seem like only hitting a ball very hard. We hope we were able to show you that variables related to game state have more of an impact on home run hitting than some extrinsic factor such as lighting or weather, as best we can tell. Indeed, the surprising prevalence of first-inning home runs coupled with a peak in home runs towards the middle of the game show that they aren't correlated very well at all with any factor that changes relatively linearly over time. Perhaps most intriguingly, the relationship between ball-strike counts demonstrates that hitting a home run is as much a mental game as a physical one. As the at-bat progresses, the mounting psychological pressure visibly impacts a player's performance, with swing frequencies and home run probabilities shifting in intricate patterns in and out of favor with the hitter and pitcher.</p>
 
-            <p>We felt, as I'm sure you do too, that it would be quite a bit easier to hit a home run on a pitch that comes in at the dead center of the strike zone, and so we decided to investigate. Below, you'll see a visualization that first shows you a heat map of how often home runs are hit in each zone.</p>
+            <p>These findings show us that baseball is a game of countless variables. Each home run represents a beautiful mix of skill, intuition, and a decent share of luck.</p>
         </section>
     </main>
 
@@ -252,8 +232,8 @@
         </div>
     </footer>
 
+    <script src="viz1.js"></script>
     <script src="viz2.js"></script>
     <script src="viz3.js"></script>
-    <script src="viz1.js"></script>
 </body>
 </html>
