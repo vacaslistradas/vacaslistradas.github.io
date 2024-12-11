@@ -1,14 +1,13 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    // Modified image loading function
     function preloadImage(url) {
         return new Promise((resolve) => {
             const img = new Image();
             img.onload = () => resolve(img);
             img.onerror = () => {
                 console.warn(`Failed to load image: ${url}`);
-                resolve(null);  // Resolve with null instead of rejecting
+                resolve(null);  
             };
             img.src = url;
         });
@@ -71,15 +70,11 @@ document.addEventListener('DOMContentLoaded', function () {
         d3.csv('Team_venue_info.csv'),
         fetch("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json").then(response => response.json()),
         fetch("https://gist.githubusercontent.com/Brideau/2391df60938462571ca9/raw/f5a1f3b47ff671eaf2fb7e7b798bacfc6962606a/canadaprovtopo.json").then(response => response.json()),
-        // Add image loading to the Promise.all array
         ...Object.entries(imageUrls).map(([name, url]) =>
             preloadImage(url).then(img => [name, img])
         )
     ]).then(([data2Raw, venue_dataRaw, us_topology, canada_topology, ...loadedImages]) => {
-        // Create a Map from the loaded images
-        // Create main container
 
-        // Create container for the visualization
         const container = document.createElement('div');
         container.id = 'baseball-viz';
         document.getElementById('viz1-container').appendChild(container);
@@ -101,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
 
     const width = 1100;
-    const height = 510;
+    const height = 600;
     let selectedPlayers = [];
     let comparisonMode = false;
     let firstSelectedPlayer = null;
@@ -120,11 +115,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     window.venue_data = venue_dataRaw;
-    // Convert loaded images array to Map
-
-
-    // Create image attachments map
-    // Process data2 with local times
     const data2 = data2Raw.map(row => ({
         ...row,
         durationMinutes: +row.durationMinutes
@@ -159,10 +149,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const infoColumn = container.append("div")
             .style("flex", "0 0 250px")
             .style("padding-right", "24px")
-            .style("padding-top", "40px")  // Add padding at top for the button
+            .style("padding-top", "40px") 
             .style("border-right", "1px solid #e2e8f0");
 
-        // Add player name with optional color
         infoColumn.append("h2")
             .style("font-size", "24px")
             .style("font-weight", "bold")
@@ -170,7 +159,6 @@ document.addEventListener('DOMContentLoaded', function () {
             .style("color", color || "#1e293b")
             .text(player.name);
 
-        // Add stats as a clean list
         const statsList = infoColumn.append("div")
             .style("display", "flex")
             .style("flex-direction", "column")
@@ -180,19 +168,16 @@ document.addEventListener('DOMContentLoaded', function () {
         addStat(statsList, "Home Runs", player.count);
         addStat(statsList, "Bats", player.batHand);
 
-        // Add inning distribution summary
         const inningStats = calculateInningStats(player.inningData);
         addStat(statsList, "Most HRs in Inning", `Inning ${inningStats.mostCommonInning} (${inningStats.maxHRs} HRs)`);
         addStat(statsList, "Avg HR Inning", inningStats.avgInning.toFixed(1));
     }
 
     function calculateInningStats(inningData) {
-        // Find most common inning
         const mostCommonInning = inningData.reduce((a, b) =>
             (a.count > b.count) ? a : b
         );
 
-        // Calculate average inning
         const totalHRs = inningData.reduce((sum, d) => sum + d.count, 0);
         const weightedSum = inningData.reduce((sum, d) => sum + (d.inning * d.count), 0);
         const avgInning = weightedSum / totalHRs;
@@ -204,10 +189,8 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     }
 
-    // Process data for players and their home runs
     const playerHomeRuns = d3.rollup(data2,
         v => {
-            // Get teams for this player
             const teamCounts = d3.rollup(v,
                 games => games.length,
                 game => {
@@ -219,26 +202,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             );
 
-            // Get most frequent team
             const primaryTeam = Array.from(teamCounts.entries())
                 .sort((a, b) => b[1] - a[1])[0][0];
 
-            // Process innings data
-            const inningData = Array(20).fill(0); // Up to 20 innings to account for extra innings
+            const inningData = Array(20).fill(0); 
             v.forEach(hr => {
                 if (hr && hr.inningNumber) {
-                    const inning = hr.inningNumber - 1; // 0-based index
+                    const inning = hr.inningNumber - 1; 
                     if (inning >= 0 && inning < 20) {
                         inningData[inning]++;
                     }
                 }
             });
 
-            // Format inning data for visualization
             const formattedInningData = inningData.map((count, i) => ({
                 inning: i + 1,
                 count: count
-            })).filter(d => d.count > 0); // Only keep innings with home runs
+            })).filter(d => d.count > 0); 
 
             return {
                 count: v.length,
@@ -254,7 +234,6 @@ document.addEventListener('DOMContentLoaded', function () {
     );
 
 
-    // Add intro overlay that shows on first load
     const introOverlay = mainDiv.append("div")
         .style("position", "absolute")
         .style("top", "0")
@@ -269,7 +248,6 @@ document.addEventListener('DOMContentLoaded', function () {
         .style("padding", "2rem")
         .style("z-index", "1000");
 
-    // Add intro content
     introOverlay.append("h1")
         .style("font-size", "2rem")
         .style("font-weight", "bold")
@@ -307,7 +285,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 .style("pointer-events", "none");
         });
 
-    // Add title
     mainDiv.append("h2")
         .style("text-align", "center")
         .style("margin", "0 0 20px 0")
@@ -315,14 +292,12 @@ document.addEventListener('DOMContentLoaded', function () {
         .style("font-size", "24px")
         .text("MLB Home Run Leaders");
 
-    // Create grid
     const grid = mainDiv.append("div")
         .style("display", "grid")
         .style("grid-template-columns", "repeat(7, 1fr)")
         .style("gap", "12px")
         .style("padding", "8px");
 
-    // Sort players by home run count
     const sortedPlayers = Array.from(playerHomeRuns.entries())
         .map(([name, data]) => ({
             name: name,
@@ -331,13 +306,12 @@ document.addEventListener('DOMContentLoaded', function () {
         .sort((a, b) => b.count - a.count)
         .slice(0, 14);
 
-    // Create comparison instructions overlay
-    // Update the instructionsOverlay creation
+
     const instructionsOverlay = mainDiv.append("div")
         .style("position", "absolute")
-        .style("bottom", "20px")  // Keep some padding from the top
-        .style("left", "50%")  // Center horizontally
-        .style("transform", "translateX(-50%)")  // Center horizontally
+        .style("bottom", "20px")  
+        .style("left", "50%") 
+        .style("transform", "translateX(-50%)")  
         .style("background", "white")
         .style("padding", "12px 16px")
         .style("border-radius", "8px")
@@ -347,7 +321,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .style("gap", "12px")
         .style("z-index", "999");
 
-    // Keep the rest of the instructions overlay content the same
+   
     instructionsOverlay.append("span")
         .style("font-size", "14px")
         .style("color", "#1e293b")
@@ -374,7 +348,6 @@ document.addEventListener('DOMContentLoaded', function () {
     mainDiv.select("h2").remove();
 
 
-    // Modal container
     const modal = mainDiv.append("div")
         .style("position", "absolute")
         .style("top", "0")
@@ -387,7 +360,6 @@ document.addEventListener('DOMContentLoaded', function () {
         .style("align-items", "center")
         .style("z-index", "1000");
 
-    // Modal content
     const modalContent = modal.append("div")
         .style("background", "white")
         .style("border-radius", "12px")
@@ -411,12 +383,11 @@ document.addEventListener('DOMContentLoaded', function () {
             .style("cursor", "pointer")
             .attr("data-player", player.name);
 
-        // Click handler
+
         card.on("click", () => {
             handleCardClick(player);
         });
 
-        // Add selection badge
         const selectionBadge = card.append("div")
             .style("position", "absolute")
             .style("top", "10px")
@@ -433,10 +404,8 @@ document.addEventListener('DOMContentLoaded', function () {
             .style("z-index", "2")
             .text("Selected");
 
-        // Store reference to selection badge in the card element
         card.node().__selectionBadge = selectionBadge;
 
-        // Load player image
         getPlayerImageUrl(player).then(imageUrl => {
             if (imageUrl) {
                 card.style("background-image", `url(${imageUrl})`)
@@ -446,7 +415,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        // Gradient overlay
         card.append("div")
             .style("position", "absolute")
             .style("left", "0")
@@ -455,7 +423,6 @@ document.addEventListener('DOMContentLoaded', function () {
             .style("height", "25%")
             .style("background", "linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0) 100%)");
 
-        // Info container
         const info = card.append("div")
             .style("position", "absolute")
             .style("bottom", "8px")
@@ -465,13 +432,11 @@ document.addEventListener('DOMContentLoaded', function () {
             .style("color", "white")
             .style("text-align", "left");
 
-        // Container for badge and text
         const contentContainer = info.append("div")
             .style("display", "flex")
             .style("align-items", "flex-start")
             .style("gap", "8px");
 
-        // Rank badge
         contentContainer.append("div")
             .style("background", i < 3 ? "rgba(254, 243, 199, 0.9)" : "rgba(241, 245, 249, 0.9)")
             .style("color", i < 3 ? "#92400e" : "#64748b")
@@ -486,11 +451,9 @@ document.addEventListener('DOMContentLoaded', function () {
             .style("margin-top", "2px")
             .text(i + 1);
 
-        // Text container
         const textContainer = contentContainer.append("div")
             .style("flex", "1");
 
-        // Player name
         textContainer.append("div")
             .style("font-weight", "bold")
             .style("font-size", "12px")
@@ -498,18 +461,15 @@ document.addEventListener('DOMContentLoaded', function () {
             .style("margin-bottom", "3px")
             .text(player.name);
 
-        // Stats
         textContainer.append("div")
             .style("font-size", "11px")
             .style("opacity", "0.9")
             .style("line-height", "1.2")
             .text(`${player.count} HRs • ${player.team}`);
 
-        // Click handler
         card.on("click", () => {
             handleCardClick(player);
 
-            // Update selection badge
             if (comparisonMode && selectedPlayers.includes(player)) {
                 selectionBadge
                     .style("opacity", "1")
@@ -521,7 +481,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        // Hover effects
         card
             .on("mouseover", function () {
                 d3.select(this)
@@ -549,9 +508,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 comparisonMode = false;
                 instructionsOverlay.style("display", "none");
                 showComparisonModal(firstSelectedPlayer, player);
-                // Reset first selected player
                 firstSelectedPlayer = null;
-                // Update all cards to remove selection badge
                 updateAllSelectionBadges();
             }
         } else {
@@ -561,14 +518,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // 4. Close modal when clicking outside
     modal.on("click", function (event) {
         if (event.target === this) {
             hideModal();
         }
     });
 
-    // Update hideModal to clean up tooltips
     function hideModal() {
         modal.selectAll("*").on(".", null);
         modal.style("display", "none");
@@ -582,28 +537,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showPlayerModal(player) {
-        // Clear previous content
         modalContent.html("")
-            .style("max-height", "none")  // Remove max-height limitation
-            .style("overflow", "visible")  // Remove scrolling
-            .style("height", "auto");     // Allow content to determine height
+            .style("max-height", "none")  
+            .style("overflow", "visible")  
+            .style("height", "auto");     
 
         const modalLayout = modalContent.append("div")
             .style("display", "flex")
             .style("gap", "24px")
-            .style("height", "480px")    // Slightly reduced fixed height
+            .style("height", "480px")    
             .style("width", "100%");
 
-        // Add player info column
         addPlayerInfoColumn(modalLayout, player);
 
-        // Add histogram column
         const histogramColumn = modalLayout.append("div")
             .style("flex", "1")
             .style("min-width", "0")
             .style("height", "100%");
 
-        // Add compare button
         modalContent.append("button")
             .style("position", "absolute")
             .style("left", "16px")
@@ -624,10 +575,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 updateAllSelectionBadges();
             });
 
-        // Add close button
         addCloseButton(modalContent);
 
-        // Show modal and create histogram
         modal.style("display", "flex");
         createHistogram(histogramColumn, [player], playerColors[0]);
     }
@@ -651,19 +600,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showComparisonModal(player1, player2) {
-        // Clear previous content
         modalContent.html("")
-            .style("max-height", "none")  // Remove max-height limitation
-            .style("overflow", "visible") // Remove scrolling
-            .style("height", "auto");     // Allow content to determine height
+            .style("max-height", "none")  
+            .style("overflow", "visible") 
+            .style("height", "auto");     
 
-        // Create compact player info section at top
         const infoSection = modalContent.append("div")
             .style("width", "100%")
             .style("padding-bottom", "20px")
             .style("border-bottom", "1px solid #e2e8f0");
 
-        // Player 1 info
         const player1Info = infoSection.append("div")
             .style("display", "inline-block")
             .style("margin-right", "20px")
@@ -679,14 +625,12 @@ document.addEventListener('DOMContentLoaded', function () {
             .style("margin-left", "8px")
             .text(`${player1.count} HRs • ${player1.team} • Bats: ${player1.batHand}`);
 
-        // vs text
         infoSection.append("span")
             .style("margin", "0 12px")
             .style("font-weight", "bold")
             .style("color", "#64748b")
             .text("vs");
 
-        // Player 2 info
         const player2Info = infoSection.append("div")
             .style("display", "inline-block")
             .style("margin-left", "20px")
@@ -702,18 +646,14 @@ document.addEventListener('DOMContentLoaded', function () {
             .style("margin-left", "8px")
             .text(`${player2.count} HRs • ${player2.team} • Bats: ${player2.batHand}`);
 
-        // Add histogram with fixed height
         const histogramContainer = modalContent.append("div")
-            .style("height", "400px")    // Fixed height for histogram
+            .style("height", "400px")    
             .style("margin-top", "20px");
 
-        // Add close button
         addCloseButton(modalContent);
 
-        // Show modal
         modal.style("display", "flex");
 
-        // Create overlaid histogram with both players' data
         createHistogram(histogramContainer, [player1, player2], null, true);
     }
 
@@ -723,10 +663,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const width = containerRect.width - margin.left - margin.right;
         const height = containerRect.height - margin.top - margin.bottom;
 
-        // Clear container
         container.html("");
 
-        // Create tooltip
         const tooltip = d3.select("body").append("div")
             .style("position", "absolute")
             .style("visibility", "hidden")
@@ -739,19 +677,16 @@ document.addEventListener('DOMContentLoaded', function () {
             .style("pointer-events", "none")
             .style("z-index", "1000");
 
-        // Create SVG
         const svg = container.append("svg")
             .attr("width", containerRect.width)
             .attr("height", containerRect.height)
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        // Find the maximum inning in the data
         const maxInning = d3.max(players.flatMap(p =>
             p.inningData.map(d => d.inning)
         ));
 
-        // Create scales
         const x = d3.scaleBand()
             .domain(d3.range(1, maxInning + 1))
             .range([0, width])
@@ -763,7 +698,6 @@ document.addEventListener('DOMContentLoaded', function () {
             .nice()
             .range([height, 0]);
 
-        // Add bars for each player
         players.forEach((player, i) => {
             svg.selectAll(`.bars-${i}`)
                 .data(player.inningData)
@@ -775,11 +709,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 .attr("width", x.bandwidth() / (isComparison ? 2 : 1))
                 .attr("height", d => height - y(d.count))
                 .attr("fill", isComparison ? playerColors[i] : (color || playerColors[0]))
-                .attr("opacity", 0.7)  // Start with lower opacity for all bars
+                .attr("opacity", 0.7)  
                 .attr("transform", isComparison ? `translate(${i * x.bandwidth() / 2}, 0)` : null)
                 .on("mouseover", function (event, d) {
                     const bar = d3.select(this);
-                    bar.attr("opacity", 1);  // Full opacity on hover for both single and comparison
+                    bar.attr("opacity", 1);  
 
                     const tooltipText = isComparison ?
                         `${player.name}: ${d.count} HR${d.count !== 1 ? 's' : ''} in inning ${d.inning}` :
@@ -797,12 +731,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         .style("top", (event.pageY - 10) + "px");
                 })
                 .on("mouseout", function () {
-                    d3.select(this).attr("opacity", 0.7);  // Return to original opacity on mouseout
+                    d3.select(this).attr("opacity", 0.7);  
                     tooltip.style("visibility", "hidden");
                 });
         });
 
-        // Add axes
         svg.append("g")
             .attr("transform", `translate(0,${height})`)
             .call(d3.axisBottom(x).tickFormat(d => `${d}`));
@@ -810,7 +743,6 @@ document.addEventListener('DOMContentLoaded', function () {
         svg.append("g")
             .call(d3.axisLeft(y));
 
-        // Add title
         svg.append("text")
             .attr("x", width / 2)
             .attr("y", -margin.top / 2)
@@ -819,7 +751,6 @@ document.addEventListener('DOMContentLoaded', function () {
             .style("font-weight", "bold")
             .text(isComparison ? "Home Runs by Inning Comparison" : "Home Runs by Inning");
 
-        // Add legend if comparison
         if (isComparison) {
             const legend = svg.append("g")
                 .attr("transform", `translate(${width - 200}, ${-margin.top / 2})`);
@@ -840,24 +771,9 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        return tooltip; // Return tooltip for cleanup
+        return tooltip; 
     }
 
-    function addViewToggle(container, histogramContainer, player1, player2) {
-        const toggleContainer = container.append("div")
-            .style("text-align", "center")
-            .style("margin-top", "16px");
-
-        toggleContainer.append("button")
-            .style("margin", "0 8px")
-            .text("Side by Side")
-            .on("click", () => createHistogram(histogramContainer, [player1, player2], null, false));
-
-        toggleContainer.append("button")
-            .style("margin", "0 8px")
-            .text("Overlapped")
-            .on("click", () => createHistogram(histogramContainer, [player1, player2], null, true));
-    }
 
     function addCloseButton(container) {
         container.append("button")
@@ -878,7 +794,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 }).catch(error => {
     console.error('Error loading resources:', error);
-    // Add user-friendly error message to the page
     document.body.innerHTML += `
             <div style="color: red; padding: 20px; text-align: center;">
                 Error loading visualization. Please check the console for details.

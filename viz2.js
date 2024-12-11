@@ -6,21 +6,17 @@ function convertToLocalTime2(utcDate, venue) {
     }
 
     try {
-        // Input format is "YYYY-MM-DD HH:mm:ss UTC"
-        // Remove "UTC" and create a proper ISO string
+
         const cleanDate = utcDate.replace(" UTC", "").trim();
         const isoString = cleanDate.replace(" ", "T") + "Z";
 
-        // Create Date object from ISO string
         const utcDateTime = new Date(isoString);
 
-        // Verify we have a valid date
         if (isNaN(utcDateTime.getTime())) {
             console.error(`Invalid date created from: ${utcDate}`);
             return null;
         }
 
-        // Convert to local time with the venue's timezone
         const options = {
             timeZone: venueRow.Tstring,
             year: 'numeric',
@@ -34,7 +30,6 @@ function convertToLocalTime2(utcDate, venue) {
 
         const localDateTime = utcDateTime.toLocaleString('en-US', options);
 
-        // Return in format "YYYY-MM-DD HH:mm:ss" plus the timezone string
         return localDateTime.replace(',', '') + ' ' + venueRow.Tstring;
 
     } catch (e) {
@@ -52,16 +47,13 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json").then(response => response.json()),
         fetch("https://gist.githubusercontent.com/Brideau/2391df60938462571ca9/raw/f5a1f3b47ff671eaf2fb7e7b798bacfc6962606a/canadaprovtopo.json").then(response => response.json())
     ]).then(([data2Raw, venue_dataRaw, us_topology, canada_topology]) => {
-        // Make venue_data available globally
         window.venue_data = venue_dataRaw;
         
-        // Process geography data
         const geography = {
             us: topojson.feature(us_topology, us_topology.objects.states),
             canada: topojson.feature(canada_topology, canada_topology.objects.canadaprov)
         };
 
-        // Process data2 with local times
         const data2 = data2Raw.map(row => ({
             ...row,
             durationMinutes: +row.durationMinutes,
@@ -83,7 +75,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const timeData = new Map();
         const gameCountByTime = new Map();
-
 
 
         function getGameHourRange(startTimeStr, durationMinutes) {
